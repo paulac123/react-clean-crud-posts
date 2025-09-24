@@ -1,6 +1,6 @@
 // src/components/PostForm.tsx
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { PostContext } from "../context/PostContext";
 import type { Post } from "../models/Post";
 import type { FormValues } from "../models/form";
@@ -8,22 +8,37 @@ import type { FormValues } from "../models/form";
 export const PostForm = () => {
   const postContext = useContext(PostContext);
 
-  if (!postContext) return <div>Contexto no disponible</div>;
-
-  const { createPost } = postContext;
+  const { createPost, updatePost, editPost, setEditPost } = postContext;
 
   const { register, handleSubmit, reset } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => {
-    const newPost: Post = {
-      id: Date.now(), // ID temporal; la API real dará uno único
-      title: data.title,
-      description: data.description,
-      createdAt: new Date(),
-    };
+  // 👇 Cargar valores al formulario cuando editPost cambie
+  useEffect(() => {
+    if (editPost) {
+      reset({
+        title: editPost.title,
+        description: editPost.description,
+      });
+    }
+  }, [editPost, reset]);
 
-    createPost(newPost);
-    reset(); // Limpiar formulario
+  const onSubmit = (data: FormValues) => {
+    if (editPost) {
+      // Modo edición
+      updatePost(editPost.id, data);
+      setEditPost(null); // salir del modo edición
+    } else {
+      // Modo creación
+      const newPost: Post = {
+        id: Date.now(), // temporal, normalmente lo da la API
+        title: data.title,
+        description: data.description,
+        createdAt: new Date(),
+      };
+      createPost(newPost);
+    }
+
+    reset(); // limpiar formulario
   };
 
   return (
@@ -46,7 +61,20 @@ export const PostForm = () => {
         />
       </div>
 
-      <button type="submit">Crear Post</button>
+      <button type="submit">
+        {editPost ? "Actualizar Post" : "Crear Post"}
+      </button>
+      {editPost && (
+        <button
+          type="button"
+          onClick={() => {
+            reset();
+            setEditPost(null);
+          }}
+        >
+          Cancelar
+        </button>
+      )}
     </form>
   );
 };

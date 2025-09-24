@@ -3,7 +3,11 @@ import { PostContext } from "../context/PostContext";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import type { Post } from "../models/Post";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
 
 export const PostList = () => {
   const postContext = useContext(PostContext);
@@ -12,8 +16,10 @@ export const PostList = () => {
 
   if (!postContext) return null;
 
+  const { post, setEditPost, loading, error } = postContext;
+
   // Mapea los posts del contexto a las filas del DataGrid
-  const rows = postContext.post.map((post) => ({
+  const rows = post.map((post) => ({
     id: post.id,
     title: post.title,
     description: post.description,
@@ -45,22 +51,48 @@ export const PostList = () => {
           label="Delete"
           onClick={() => handleDeleteClick(params.id)}
         />,
+        <GridActionsCellItem
+          icon={<EditIcon />}
+          label="Edit"
+          onClick={() => setEditPost(params.row as Post)}
+        />,
       ],
     },
   ];
 
   return (
     <>
-      <div style={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 5, page: 0 } },
-          }}
-          pageSizeOptions={[5, 10, 20]}
-          pagination
-        />
+      {/* Contenedor con position:relative para poner el spinner encima */}
+      <div style={{ height: 400, width: "100%", position: "relative" }}>
+        {/*  Mostrar loader encima de la tabla */}
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        )}
+
+        {/*  Mostrar error si existe */}
+        {error && <Alert severity="error">{error}</Alert>}
+
+        {/*  Mostrar tabla solo cuando no está cargando ni con error */}
+        {!loading && !error && (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 5, page: 0 } },
+            }}
+            pageSizeOptions={[5, 10, 20]}
+            pagination
+          />
+        )}
       </div>
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
