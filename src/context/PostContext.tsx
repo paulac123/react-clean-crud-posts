@@ -4,31 +4,27 @@ import type { Props } from "../models/commin";
 import type { Notification } from "../models/notifications";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-
+import type { FormValues } from "../models/form";
 import { PostService } from "../services/postsService";
 import { PostApiRepository } from "../infra/PostApiRepository";
 import type { AlertColor } from "@mui/material";
+import { useContext } from "react";
 
 // Instanciamos repository y service
 const repository = new PostApiRepository();
 const service = new PostService(repository);
 
 // Creamos el contexto
-export const PostContext = createContext<PostContextType>({
-  post: [],
-  createPost: async () => {},
-  updatePost: async () => {},
-  deletePost: async () => {},
-  editPost: null,
-  setEditPost: () => {},
-  appNotification: null,
-  setAppNotification: () => {},
-  notify: () => {},
-  loading: false,
-  error: null,
-  setLoading: () => {},
-  setError: () => {},
-});
+export const PostContext = createContext<PostContextType | undefined>(
+  undefined
+);
+
+export const usePostContext = () => {
+  const ctx = useContext(PostContext);
+  if (!ctx)
+    throw new Error("usePostContext debe usarse dentro de PostProvider");
+  return ctx;
+};
 
 export const PostProvider = ({ children }: Props) => {
   const [post, setPost] = useState<Post[]>([]);
@@ -61,10 +57,17 @@ export const PostProvider = ({ children }: Props) => {
   }, []);
 
   // Crear un post
-  const createPost = async (newPost: Post) => {
+  const createPost = async (data: FormValues) => {
     try {
       setLoading(true);
       setError(null);
+      // El contexto completa los campos que el form no da
+      const newPost: Post = {
+        id: Date.now(), // ⚡ generar id aquí
+        title: data.title,
+        description: data.description,
+        createdAt: new Date(),
+      };
       const created = await service.createPost(newPost);
       if (created) {
         setPost((prev) => [...prev, created]);

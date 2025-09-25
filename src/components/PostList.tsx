@@ -1,20 +1,19 @@
-import { useContext, useState } from "react";
-import { PostContext } from "../context/PostContext";
+import { useState } from "react";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import type { Post } from "../models/Post";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+import { ConfirmDialog } from "./Modal/Modal";
+import { usePostContext } from "../context/PostContext";
 
 export const PostList = () => {
-  const postContext = useContext(PostContext);
+  const postContext = usePostContext();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<number | string | null>(null);
-
-  if (!postContext) return null;
 
   const { post, setEditPost, loading, error } = postContext;
 
@@ -46,28 +45,31 @@ export const PostList = () => {
       headerName: "Actions",
       width: 150,
       getActions: (params) => [
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={() => handleDeleteClick(params.id)}
-        />,
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          onClick={() => setEditPost(params.row as Post)}
-        />,
+        <Tooltip title="Delete">
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={() => handleDeleteClick(params.id)}
+          />
+        </Tooltip>,
+        <Tooltip title="Edit">
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            onClick={() => setEditPost(params.row as Post)}
+          />
+        </Tooltip>,
       ],
     },
   ];
 
   return (
     <>
-      {/* Contenedor con position:relative para poner el spinner encima */}
-      <div style={{ height: 400, width: "100%", position: "relative" }}>
+      <Box sx={{ height: 400, width: "100%", position: "relative" }}>
         {/*  Mostrar loader encima de la tabla */}
         {loading && (
-          <div
-            style={{
+          <Box
+            sx={{
               position: "absolute",
               top: "50%",
               left: "50%",
@@ -75,7 +77,7 @@ export const PostList = () => {
             }}
           >
             <CircularProgress />
-          </div>
+          </Box>
         )}
 
         {/*  Mostrar error si existe */}
@@ -93,17 +95,13 @@ export const PostList = () => {
             pagination
           />
         )}
-      </div>
-
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>¿Seguro que quieres eliminar este post?</DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
-          <Button onClick={confirmDelete} color="error">
-            Eliminar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      </Box>
+      <ConfirmDialog
+        open={openDialog}
+        title="¿Seguro que quieres eliminar este post?"
+        onClose={() => setOpenDialog(false)}
+        onConfirm={confirmDelete}
+      />
     </>
   );
 };

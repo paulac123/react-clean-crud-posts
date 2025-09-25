@@ -1,6 +1,7 @@
 import type React from "react";
 import type { AlertColor } from "@mui/material";
-import type { Notification as AppNotification } from "./notifications";
+import type { Notification as AppNotification } from "./Notifications";
+import type { FormValues } from "./form";
 
 export interface Post {
   id: number;
@@ -11,8 +12,8 @@ export interface Post {
 
 export interface PostContextType {
   post: Post[];
-  createPost: (newPost: Post) => Promise<void>;
-  updatePost: (id: number | string, updated: Partial<Post>) => Promise<void>;
+  createPost: (newPost: FormValues) => Promise<void>;
+  updatePost: (id: number | string, data: FormValues) => Promise<void>;
   deletePost: (id: number | string) => Promise<void>;
   editPost: Post | null;
   setEditPost: React.Dispatch<React.SetStateAction<Post | null>>;
