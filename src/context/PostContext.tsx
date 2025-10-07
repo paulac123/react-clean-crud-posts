@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext } from "react";
 import type { Post, PostContextType } from "../models/Post";
 import type { Props } from "../models/commin";
-import type { Notification } from "../models/notifications";
+import type { Notification } from "../models/Notifications";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import type { FormValues } from "../models/form";
