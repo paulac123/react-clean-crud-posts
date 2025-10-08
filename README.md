@@ -1,9 +1,9 @@
-  # Aplicación de Posts en React + TypeScript + MUI
+# Aplicación de Posts en React + TypeScript + MUI
 
 ## 📖 **Descripción**
 
 Aplicación web frontend desarrollada con React, que consume la API pública JSONPlaceholder
- para listar, crear, actualizar y eliminar posts.
+para listar, crear, actualizar y eliminar posts.
 
 ### Incluye:
 
@@ -14,7 +14,8 @@ Aplicación web frontend desarrollada con React, que consume la API pública JSO
 - Uso de React Hooks, React Router, Axios y Material UI.
 
 La aplicación sigue buenas prácticas de desarrollo, separación por componentes y manejo de estado con Context API.
-___________________________________________________________________
+
+---
 
 ## ⚙️ **Tecnologías utilizadas**
 
@@ -25,9 +26,11 @@ ___________________________________________________________________
 - Axios
 - Material UI (MUI)
 - Jest + React Testing Library (para pruebas unitarias)
- ________________________________________________________________
+
+---
 
 ## 📋 **Instalación y ejecución**
+
 ```bash
 # Clonar el repositorio
 git clone <URL-DEL-REPO>
@@ -42,9 +45,10 @@ npm install
 npm start
 
 **La aplicación se ejecutará en:**
-👉 http://localhost:3000
+👉 http://localhost:5173
 ```
-________________________________________________________________
+
+---
 
 ## 🚀 **Uso**
 
@@ -53,9 +57,10 @@ ________________________________________________________________
 - Editar post: hacer click en el botón "Editar", modificar los campos y guardar.
 - Eliminar post: hacer click en el botón "Eliminar".
 - Notificaciones: toda acción exitosa muestra un modal de confirmación.
-  ______________________________________________________________
+  ***
 
 ## 🧪 **Testing**
+
 ```bash
 **Para ejecutar los tests unitarios:**
 
@@ -65,9 +70,10 @@ npm run test
 Los tests fueron creados con React Testing Library y Jest, validando las funciones principales del
 formulario y las acciones de los botones (crear, editar y eliminar).
 
-___________________________________________________________________
+---
 
 ## 🧱 **Estructura del proyecto**
+
 ```bash
 
 src/
@@ -78,7 +84,8 @@ src/
  ├─ App.tsx           # Componente raíz y configuración de rutas
  └─ main.tsx          # Punto de entrada principal
 ```
- ____________________________________________________________________
+
+---
 
 ## 🧭 **Buenas prácticas aplicadas**
 
@@ -87,7 +94,7 @@ src/
 - Manejo de estado global con Context API.
 - Tipado con TypeScript para mejorar la mantenibilidad.
 - Implementación de test unitarios para asegurar la funcionalidad de los formularios.
-  ____________________________________________________________________
+  ***
 
 ## 🧑‍💻 **Autor**
 
@@ -96,4 +103,3 @@ src/
 Desarrolladora Fullstack
 
 🌐 GitHub: https://github.com/paulac123
-
