@@ -49,7 +49,7 @@ export const PostForm = () => {
       elevation={3}
       sx={{ p: 3, mb: 3, maxWidth: 800, margin: "30px auto" }}
     >
-      <Typography variant="h6" sx={{ mb: 1 }}>
+      <Typography variant="h6" sx={{ mb: 4 }}>
         {editPost ? "Editar Post" : "Nuevo Post"}
       </Typography>
 
