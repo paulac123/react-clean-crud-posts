@@ -64,6 +64,7 @@ export const PostForm = () => {
           fullWidth
           error={!!errors.title}
           helperText={errors.title ? "El título es requerido" : ""}
+          InputLabelProps={{ shrink: true }}
           {...register("title", { required: true })}
         />
 
